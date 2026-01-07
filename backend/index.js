@@ -65,14 +65,17 @@ app.post('/download', async (req, res) => {
             const defaultQuality = data.data.nwmplay ? 'nwmplay' : (data.data.hdplay ? 'hdplay' : 'play');
             
             if (Object.keys(qualityOptions).length > 0) {
-                res.json({ 
-                    downloadUrl: qualityOptions[defaultQuality].url,
-                    defaultQuality: defaultQuality,
-                    qualities: qualityOptions,
-                    title: data.data.title || 'TikTok Video',
-                    author: data.data.author || '',
-                    cover: data.data.cover || ''
-                });
+                    const selectedUrl = qualityOptions[defaultQuality].url;
+                    const filename = `${encodeURIComponent(data.data.title || 'tiktok-video')}.mp4`;
+                    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+                    res.json({ 
+                        downloadUrl: selectedUrl,
+                        defaultQuality: defaultQuality,
+                        qualities: qualityOptions,
+                        title: data.data.title || 'TikTok Video',
+                        author: data.data.author || '',
+                        cover: data.data.cover || ''
+                    });
             } else {
                 console.error('No video URL found in API response. Full result:', data);
                 res.status(500).json({ error: 'Video URL bulunamadı.', details: data.msg || 'Unknown error' });
