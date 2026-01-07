@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch').default; // Import node-fetch correctly
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Render gibi platformlar PORT ortam değişkenini kullanır
+
 
 app.use(express.json()); // JSON body parser
 app.use(cors()); // Enable CORS for all routes
