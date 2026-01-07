@@ -95,68 +95,66 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
 
         const data = await response.json();
 
-        if (data.downloadUrl) {
-            // Create download link with proper filename
-            const filename = (data.title || 'tiktok-video').replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.mp4';
-            
-            // Kalite seçeneklerini oluştur
-            let qualityOptionsHtml = '';
-            if (data.qualities && Object.keys(data.qualities).length > 1) {
-                qualityOptionsHtml = '<div class="quality-selector"><p class="quality-label">Kalite Seçeneği:</p>';
-                Object.keys(data.qualities).forEach((key, index) => {
-                    const quality = data.qualities[key];
-                    const isDefault = key === data.defaultQuality;
-                    qualityOptionsHtml += `
-                        <div class="quality-option ${isDefault ? 'selected' : ''}" data-quality="${key}" data-url="${quality.url}">
-                            <span class="quality-name">${quality.label}</span>
-                            ${isDefault ? '<span class="quality-badge">Varsayılan</span>' : ''}
-                        </div>
-                    `;
-                });
-                qualityOptionsHtml += '</div>';
-            }
-            
-            // Seçili kaliteyi takip et
-            let selectedQuality = data.defaultQuality || Object.keys(data.qualities || {})[0];
-            let selectedUrl = data.downloadUrl;
-            
-            resultDiv.innerHTML = `
-                <div class="success">
-                    ${qualityOptionsHtml}
-                    <div class="download-buttons">
-                        <a href="${selectedUrl}" download="${filename}" class="download-btn" id="downloadLink">
-                            Videoyu İndir
-                        </a>
-                    </div>
-                </div>
-            `;
-            
-            // Kalite seçimi için event listener'lar ekle
-            if (data.qualities && Object.keys(data.qualities).length > 1) {
-                document.querySelectorAll('.quality-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        // Tüm seçeneklerden selected class'ını kaldır
-                        document.querySelectorAll('.quality-option').forEach(opt => opt.classList.remove('selected'));
-                        // Tıklanan seçeneği işaretle
-                        option.classList.add('selected');
-                        
-                        // Yeni URL'i al
-                        selectedQuality = option.dataset.quality;
-                        selectedUrl = option.dataset.url;
-                        
-                        // İndirme ve önizleme linklerini güncelle
-                        const downloadLink = document.getElementById('downloadLink');
-                        const previewLink = document.getElementById('previewLink');
-                        if (downloadLink) {
-                            downloadLink.href = selectedUrl;
-                            downloadLink.textContent = `${data.qualities[selectedQuality].label} İndir`;
-                        }
-                        if (previewLink) {
-                            previewLink.href = selectedUrl;
-                        }
+        if (data.proxyDownloadUrl) {
+                // Create download link with proper filename
+                const filename = (data.title || 'tiktok-video').replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.mp4';
+                
+                // Kalite seçeneklerini oluştur
+                let qualityOptionsHtml = '';
+                if (data.qualities && Object.keys(data.qualities).length > 1) {
+                    qualityOptionsHtml = '<div class="quality-selector"><p class="quality-label">Kalite Seçeneği:</p>';
+                    Object.keys(data.qualities).forEach((key, index) => {
+                        const quality = data.qualities[key];
+                        const isDefault = key === data.defaultQuality;
+                        qualityOptionsHtml += `
+                            <div class="quality-option ${isDefault ? 'selected' : ''}" data-quality="${key}" data-url="${quality.url}" data-filename="${filename}">
+                                <span class="quality-name">${quality.label}</span>
+                                ${isDefault ? '<span class="quality-badge">Varsayılan</span>' : ''}
+                            </div>
+                        `;
                     });
-                });
-            }
+                    qualityOptionsHtml += '</div>';
+                }
+                
+                // Seçili kaliteyi takip et
+                let selectedQuality = data.defaultQuality || Object.keys(data.qualities || {})[0];
+                let selectedProxyDownloadUrl = data.proxyDownloadUrl; // Backend'den gelen proxy URL'sini kullan
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ${qualityOptionsHtml}
+                        <div class="download-buttons">
+                            <a href="${selectedProxyDownloadUrl}" download="${filename}" class="download-btn" id="downloadLink">
+                                Videoyu İndir
+                            </a>
+                        </div>
+                    </div>
+                `;
+                
+                // Kalite seçimi için event listener'lar ekle
+                if (data.qualities && Object.keys(data.qualities).length > 1) {
+                    document.querySelectorAll('.quality-option').forEach(option => {
+                        option.addEventListener('click', () => {
+                            // Tüm seçeneklerden selected class'ını kaldır
+                            document.querySelectorAll('.quality-option').forEach(opt => opt.classList.remove('selected'));
+                            // Tıklanan seçeneği işaretle
+                            option.classList.add('selected');
+                            
+                            // Yeni URL'i al ve proxy URL'sini oluştur
+                            selectedQuality = option.dataset.quality;
+                            const newVideoUrl = option.dataset.url;
+                            const newFilename = option.dataset.filename;
+                            selectedProxyDownloadUrl = `https://tiktok-downloader-backend-yk1f.onrender.com/proxy-video?videoUrl=${encodeURIComponent(newVideoUrl)}&filename=${encodeURIComponent(newFilename)}`;
+                            
+                            // İndirme ve önizleme linklerini güncelle
+                            const downloadLink = document.getElementById('downloadLink');
+                            if (downloadLink) {
+                                downloadLink.href = selectedProxyDownloadUrl;
+                                downloadLink.textContent = `${data.qualities[selectedQuality].label} İndir`;
+                            }
+                        });
+                    });
+                }
         } else {
             resultDiv.innerHTML = `<p class="error">Hata: ${data.error || 'Bilinmeyen bir hata oluştu.'}${data.details ? '<br><small>' + data.details + '</small>' : ''}</p>`;
         }
