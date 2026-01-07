@@ -67,9 +67,11 @@ app.post('/download', async (req, res) => {
             if (Object.keys(qualityOptions).length > 0) {
                     const selectedUrl = qualityOptions[defaultQuality].url;
                     const filename = `${encodeURIComponent(data.data.title || 'tiktok-video')}.mp4`;
-                    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+                    // Frontend'e doğrudan indirme URL'si yerine proxy URL'si gönderiyoruz
+                    const proxyDownloadUrl = `/proxy-video?videoUrl=${encodeURIComponent(selectedUrl)}&filename=${encodeURIComponent(filename)}`;
                     res.json({ 
-                        downloadUrl: selectedUrl,
+                        downloadUrl: selectedUrl, // Bu hala frontend'de gösterilebilir veya kullanılabilir
+                        proxyDownloadUrl: proxyDownloadUrl, // Yeni proxy indirme URL'si
                         defaultQuality: defaultQuality,
                         qualities: qualityOptions,
                         title: data.data.title || 'TikTok Video',
@@ -92,4 +94,38 @@ app.post('/download', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Backend server listening at http://localhost:${port}`);
+});
+
+// Yeni proxy indirme endpoint'i
+app.get('/proxy-video', async (req, res) => {
+    const { videoUrl, filename } = req.query;
+
+    if (!videoUrl) {
+        return res.status(400).send('Video URL is required.');
+    }
+
+    try {
+        const response = await fetch(videoUrl);
+
+        if (!response.ok) {
+            console.error(`Failed to fetch video from ${videoUrl}: ${response.statusText}`);
+            return res.status(response.status).send('Failed to fetch video.');
+        }
+
+        // Content-Type başlığını orijinal yanıttan al
+        const contentType = response.headers.get('content-type');
+        if (contentType) {
+            res.setHeader('Content-Type', contentType);
+        }
+
+        // İndirme başlığını ayarla
+        res.setHeader('Content-Disposition', `attachment; filename="${decodeURIComponent(filename || 'tiktok-video.mp4')}"`);
+
+        // Video akışını istemciye yönlendir
+        response.body.pipe(res);
+
+    } catch (error) {
+        console.error('Error proxying video:', error);
+        res.status(500).send('Error proxying video.');
+    }
 });
