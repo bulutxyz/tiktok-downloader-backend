@@ -4,7 +4,7 @@ async function checkBackendConnection() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 saniye timeout
         
-        const response = await fetch('http://localhost:3000/health', {
+        const response = await fetch('https://tiktok-downloader-backend-yk1f.onrender.com/health', {
             method: 'GET',
             signal: controller.signal
         });
@@ -78,7 +78,7 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 saniye timeout
         
-        const response = await fetch('http://localhost:3000/download', {
+        const response = await fetch('https://tiktok-downloader-backend-yk1f.onrender.com/download', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
