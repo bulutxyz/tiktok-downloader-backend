@@ -293,36 +293,45 @@ document.getElementById('downloadStoryButton').addEventListener('click', async (
             body: JSON.stringify({ username: username })
         });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Hikaye yükleme hatası');
+        }
+
         const data = await response.json();
 
-        if (response.ok && data.stories) {
-            if (data.stories.length > 0) {
-                let storiesHtml = '<div class="story-grid">';
-                data.stories.forEach((story, index) => {
-                    let storyUrl = story.url || story.video_url || story.cover;
-                    if (storyUrl && storyUrl.startsWith('//')) storyUrl = 'https:' + storyUrl;
-                    else if (storyUrl && storyUrl.startsWith('/')) storyUrl = 'https://tikwm.com' + storyUrl;
-                    
-                    storiesHtml += `
-                        <div class="story-item">
-                            ${storyUrl ? `<img src="${storyUrl}" alt="Story ${index + 1}">` : ''}
-                            <a href="${storyUrl}" download>İndir</a>
-                        </div>
-                    `;
-                });
-                storiesHtml += '</div>';
+        if (data.stories && Array.isArray(data.stories) && data.stories.length > 0) {
+            let storiesHtml = '<div class="story-grid">';
+            data.stories.forEach((story, index) => {
+                let storyUrl = story.play || story.video || story.video_url || story.url || story.cover;
+                let coverUrl = story.cover || story.origin_cover || storyUrl;
                 
-                resultDiv.innerHTML = `
-                    <div class="success">
-                        <p class="success-message">${data.stories.length} hikaye bulundu!</p>
-                        ${storiesHtml}
+                if (storyUrl && storyUrl.startsWith('//')) storyUrl = 'https:' + storyUrl;
+                else if (storyUrl && storyUrl.startsWith('/')) storyUrl = 'https://tikwm.com' + storyUrl;
+                
+                if (coverUrl && coverUrl.startsWith('//')) coverUrl = 'https:' + coverUrl;
+                else if (coverUrl && coverUrl.startsWith('/')) coverUrl = 'https://tikwm.com' + coverUrl;
+                
+                storiesHtml += `
+                    <div class="story-item">
+                        ${coverUrl ? `<img src="${coverUrl}" alt="Story ${index + 1}" onerror="this.style.display='none'">` : ''}
+                        <a href="${storyUrl || '#'}" ${storyUrl ? 'download' : ''} class="download-btn" style="padding: 8px; margin: 5px; font-size: 12px;">
+                            ${storyUrl ? 'İndir' : 'URL yok'}
+                        </a>
                     </div>
                 `;
-            } else {
-                resultDiv.innerHTML = '<p class="error">Kullanıcının aktif hikayesi bulunamadı.</p>';
-            }
+            });
+            storiesHtml += '</div>';
+            
+            resultDiv.innerHTML = `
+                <div class="success">
+                    <p class="success-message">${data.stories.length} içerik bulundu!</p>
+                    ${data.message ? `<p style="color: #b8b8d4; font-size: 12px; margin: 10px 0;">${data.message}</p>` : ''}
+                    ${storiesHtml}
+                </div>
+            `;
         } else {
-            resultDiv.innerHTML = `<p class="error">Hata: ${data.error || 'Hikaye bulunamadı.'}</p>`;
+            resultDiv.innerHTML = `<p class="error">Hata: ${data.error || 'Hikaye bulunamadı veya kullanıcının aktif içeriği yok.'}</p>`;
         }
     } catch (error) {
         console.error('Story download error:', error);
