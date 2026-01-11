@@ -6,10 +6,10 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #000000;
+    background-color: #0a0a0a;
     color: #ffffff;
     min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: 90px;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     position: relative;
@@ -25,6 +25,7 @@ body {
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
+    opacity: 0.3;
 }
 
 .wave {
@@ -32,41 +33,41 @@ body {
     width: 200%;
     height: 200%;
     border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.4;
-    animation: waveMove 15s ease-in-out infinite;
+    filter: blur(100px);
+    opacity: 0.3;
+    animation: waveMove 20s ease-in-out infinite;
 }
 
 .wave1 {
-    background: radial-gradient(circle, rgba(0, 242, 234, 0.3) 0%, rgba(0, 242, 234, 0.1) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 242, 234, 0.2) 0%, rgba(0, 242, 234, 0.05) 50%, transparent 70%);
     top: -50%;
     left: -50%;
-    animation-duration: 20s;
+    animation-duration: 25s;
     animation-delay: 0s;
 }
 
 .wave2 {
-    background: radial-gradient(circle, rgba(255, 0, 80, 0.3) 0%, rgba(255, 0, 80, 0.1) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 0, 80, 0.2) 0%, rgba(255, 0, 80, 0.05) 50%, transparent 70%);
     top: 30%;
     right: -50%;
-    animation-duration: 25s;
+    animation-duration: 30s;
     animation-delay: -5s;
 }
 
 .wave3 {
-    background: radial-gradient(circle, rgba(0, 242, 234, 0.25) 0%, rgba(0, 242, 234, 0.08) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 242, 234, 0.15) 0%, rgba(0, 242, 234, 0.04) 50%, transparent 70%);
     bottom: -30%;
     left: 20%;
-    animation-duration: 30s;
+    animation-duration: 35s;
     animation-delay: -10s;
 }
 
 .wave4 {
-    background: radial-gradient(circle, rgba(255, 0, 80, 0.25) 0%, rgba(255, 0, 80, 0.08) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 0, 80, 0.15) 0%, rgba(255, 0, 80, 0.04) 50%, transparent 70%);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation-duration: 35s;
+    animation-duration: 40s;
     animation-delay: -15s;
 }
 
@@ -94,11 +95,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 16px;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    font-size: 14px;
+    padding: 0 20px;
+    background-color: transparent;
+    font-size: 15px;
     font-weight: 600;
     height: 44px;
     position: relative;
@@ -121,14 +120,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: sticky;
-    top: 44px;
+    padding: 12px 20px;
+    background-color: transparent;
+    border-bottom: none;
+    position: relative;
     z-index: 100;
+    height: 56px;
 }
 
 .menu-button,
@@ -136,32 +133,34 @@ body {
     background: transparent;
     border: none;
     color: #ffffff;
-    font-size: 20px;
-    width: 40px;
-    height: 40px;
+    font-size: 24px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     border-radius: 50%;
     transition: background-color 0.2s;
+    padding: 0;
 }
 
 .menu-button:hover,
 .help-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.08);
 }
 
 .app-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     color: #ffffff;
+    letter-spacing: -0.3px;
 }
 
 /* Main Content */
 .app-content {
-    padding: 24px 16px;
-    max-width: 600px;
+    padding: 32px 20px;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -169,146 +168,84 @@ body {
 
 /* Link Card */
 .link-card {
-    background: rgba(26, 26, 26, 0.6);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
-    border-radius: 24px;
-    padding: 48px 24px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
     text-align: center;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0;
+    border: none;
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
-}
-
-.link-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(0, 242, 234, 0.1) 0%, transparent 70%);
-    animation: cardPulse 8s ease-in-out infinite;
-    pointer-events: none;
-}
-
-@keyframes cardPulse {
-    0%, 100% {
-        transform: translate(0, 0) rotate(0deg);
-        opacity: 0.3;
-    }
-    50% {
-        transform: translate(20px, 20px) rotate(180deg);
-        opacity: 0.5;
-    }
+    overflow: visible;
 }
 
 .link-icon-container {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
+    margin-top: 20px;
 }
 
 .link-icon {
-    font-size: 64px;
+    font-size: 80px;
     margin: 0 auto;
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    animation: iconFloat 3s ease-in-out infinite;
+    border: none;
+    box-shadow: none;
     position: relative;
 }
 
-@keyframes iconFloat {
-    0%, 100% {
-        transform: translateY(0) scale(1);
-    }
-    50% {
-        transform: translateY(-10px) scale(1.05);
-    }
-}
-
 .card-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: #ffffff;
-    margin-bottom: 24px;
-    line-height: 1.4;
+    margin-bottom: 32px;
+    line-height: 1.35;
+    padding: 0 20px;
+    letter-spacing: -0.2px;
 }
 
 .tiktok-button {
     width: 100%;
+    max-width: 100%;
     background: #ffffff;
     color: #000000;
     border: none;
-    border-radius: 16px;
-    padding: 18px 24px;
+    border-radius: 12px;
+    padding: 16px 20px;
     font-size: 16px;
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     cursor: pointer;
     margin-bottom: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.2s;
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
-}
-
-.tiktok-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 242, 234, 0.3), transparent);
-    transition: left 0.5s ease;
-}
-
-.tiktok-button:hover::before {
-    left: 100%;
+    overflow: visible;
 }
 
 .tiktok-button:active {
-    transform: scale(0.96);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.7;
 }
 
 .tiktok-logo {
-    font-size: 22px;
-    background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: bold;
-    animation: logoShimmer 2s ease-in-out infinite;
-}
-
-@keyframes logoShimmer {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(1.1);
-    }
+    font-size: 20px;
+    color: #000000;
+    font-weight: normal;
 }
 
 .waiting-text {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
+    font-weight: 400;
+    margin-top: 4px;
 }
 
 /* Content Tabs */
@@ -450,68 +387,38 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: none;
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    padding: 8px 0 calc(12px + env(safe-area-inset-bottom));
+    align-items: flex-start;
+    padding: 8px 0 calc(20px + env(safe-area-inset-bottom));
     z-index: 100;
-    box-shadow: 0 -2px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 }
 
 .nav-item {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 6px 12px;
+    justify-content: flex-start;
+    gap: 5px;
+    padding: 4px 12px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: color 0.2s;
     flex: 1;
     position: relative;
-    border-radius: 16px;
-    min-width: 60px;
-}
-
-.nav-item::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 50%;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    opacity: 0;
-    z-index: -1;
-}
-
-.nav-item:active::before {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 1;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 0;
+    min-width: 0;
 }
 
 .nav-item.active {
     color: #ffffff;
-}
-
-.nav-item.active::before {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 20px rgba(0, 242, 234, 0.2);
 }
 
 .nav-icon-wrapper {
@@ -519,95 +426,78 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.nav-item.active .nav-icon-wrapper {
-    transform: scale(1.1);
+    width: 26px;
+    height: 26px;
 }
 
 .nav-icon {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     stroke: currentColor;
     fill: none;
-    stroke-width: 2;
+    stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .nav-item.active .nav-icon {
-    stroke-width: 2.5;
-    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+    stroke-width: 2;
 }
 
 .nav-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.2px;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    opacity: 0.7;
-    transform: translateY(0);
+    letter-spacing: 0;
+    opacity: 1;
+    transform: none;
 }
 
 .nav-item.active .nav-label {
-    opacity: 1;
     font-weight: 600;
-    transform: translateY(-1px);
 }
 
 .nav-item:active {
-    transform: scale(0.95);
-}
-
-.nav-item:active .nav-icon-wrapper {
-    transform: scale(0.9);
+    opacity: 0.6;
 }
 
 /* Floating Add Button */
 .floating-add-button {
     position: fixed;
     bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 20px;
+    right: 20px;
     background: #ffffff;
     color: #000000;
     border: none;
-    border-radius: 28px;
-    padding: 18px 36px;
+    border-radius: 14px;
+    padding: 16px 20px;
     font-size: 16px;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
     z-index: 99;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: buttonFloat 3s ease-in-out infinite;
-}
-
-@keyframes buttonFloat {
-    0%, 100% {
-        transform: translateX(-50%) translateY(0);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-    50% {
-        transform: translateX(-50%) translateY(-5px);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-    }
+    transition: opacity 0.2s;
+    max-width: calc(100% - 40px);
+    margin: 0 auto;
 }
 
 .floating-add-button:active {
-    transform: translateX(-50%) scale(0.95);
-    animation: none;
+    opacity: 0.7;
 }
 
 .add-icon {
-    font-size: 18px;
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: #000000;
+    flex-shrink: 0;
 }
 
 /* Quality Selector */
