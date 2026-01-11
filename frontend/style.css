@@ -473,8 +473,8 @@ body {
 .floating-add-button {
     position: fixed;
     bottom: 100px;
-    left: 20px;
-    right: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     background: #ffffff;
     color: #000000;
     border: none;
@@ -484,13 +484,14 @@ body {
     font-weight: 600;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     cursor: pointer;
     box-shadow: none;
     z-index: 99;
     transition: opacity 0.2s;
+    width: calc(100% - 40px);
     max-width: calc(100% - 40px);
-    margin: 0 auto;
 }
 
 .floating-add-button:active {
@@ -502,7 +503,7 @@ body {
     height: 20px;
     stroke: currentColor;
     fill: none;
-    stroke-width: 2;
+    stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
     color: #000000;
