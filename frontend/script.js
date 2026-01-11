@@ -187,6 +187,25 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
 });
 
 // Navigation handling
+const showVideoDownloadView = (prefillUrl) => {
+    const linkCard = document.querySelector('.link-card');
+    const contentTabs = document.querySelector('.content-tabs');
+    const videoTab = document.getElementById('video-tab');
+    const tiktokInput = document.getElementById('tiktokUrl');
+
+    if (prefillUrl) tiktokInput.value = prefillUrl;
+
+    linkCard.style.display = 'none';
+    contentTabs.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    videoTab.classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    document.querySelector('.nav-item[data-nav="link"]')?.classList.add('active');
+
+    document.getElementById('result').innerHTML = '';
+};
+
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
         const navType = item.dataset.nav;
@@ -207,6 +226,8 @@ document.querySelectorAll('.nav-item').forEach(item => {
         } else {
             document.querySelector('.link-card').style.display = 'none';
             document.querySelector('.content-tabs').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`${navType}-tab`)?.classList.add('active');
         }
     });
 });
@@ -226,21 +247,31 @@ document.getElementById('copyLinkButton')?.addEventListener('click', () => {
     if (navigator.clipboard) {
         navigator.clipboard.readText().then(text => {
             if (text && text.includes('tiktok.com')) {
-                document.getElementById('tiktokUrl').value = text;
-                document.querySelector('.link-card').style.display = 'none';
-                document.querySelector('.content-tabs').classList.add('active');
-                document.querySelector('.content-tabs').querySelector('#video-tab').classList.add('active');
+                showVideoDownloadView(text);
             }
         }).catch(() => {
             // Fallback: prompt göster
             const url = prompt('TikTok video URL\'sini yapıştırın:');
             if (url && url.includes('tiktok.com')) {
-                document.getElementById('tiktokUrl').value = url;
-                document.querySelector('.link-card').style.display = 'none';
-                document.querySelector('.content-tabs').classList.add('active');
-                document.querySelector('.content-tabs').querySelector('#video-tab').classList.add('active');
+                showVideoDownloadView(url);
             }
         });
+    }
+});
+
+// URL yapıştırıldığında otomatik indirme ekranına geç
+document.getElementById('tiktokUrl').addEventListener('paste', (e) => {
+    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+    if (pasted && pasted.includes('tiktok.com')) {
+        setTimeout(() => showVideoDownloadView(pasted), 0);
+    }
+});
+
+// URL yazıldığında tiktok.com içeriyorsa indirme ekranı aktif kalsın
+document.getElementById('tiktokUrl').addEventListener('input', (e) => {
+    const value = e.target.value;
+    if (value && value.includes('tiktok.com')) {
+        showVideoDownloadView(value);
     }
 });
 
