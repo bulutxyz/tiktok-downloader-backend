@@ -186,22 +186,73 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
     }
 });
 
-// Tab switching
-document.querySelectorAll('.tab-button').forEach(button => {
-    button.addEventListener('click', () => {
-        const tabName = button.dataset.tab;
+// Navigation handling
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const navType = item.dataset.nav;
         
-        // Tüm tab butonlarından active class'ını kaldır
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        // Tüm nav item'lardan active class'ını kaldır
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
         
-        // Tıklanan tab'ı aktif yap
-        button.classList.add('active');
-        document.getElementById(`${tabName}-tab`).classList.add('active');
+        // Tıklanan nav item'ı aktif yap
+        item.classList.add('active');
         
         // Result div'i temizle
         document.getElementById('result').innerHTML = '';
+        
+        // Navigasyon tipine göre içerik göster
+        if (navType === 'link') {
+            document.querySelector('.link-card').style.display = 'block';
+            document.querySelector('.content-tabs').classList.remove('active');
+        } else {
+            document.querySelector('.link-card').style.display = 'none';
+            document.querySelector('.content-tabs').classList.add('active');
+        }
     });
+});
+
+// Add Link Button
+document.getElementById('addLinkButton')?.addEventListener('click', () => {
+    document.querySelector('.link-card').style.display = 'block';
+    document.querySelector('.content-tabs').classList.remove('active');
+    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+    document.querySelector('.nav-item[data-nav="link"]').classList.add('active');
+    document.getElementById('result').innerHTML = '';
+});
+
+// Copy Link Button
+document.getElementById('copyLinkButton')?.addEventListener('click', () => {
+    // Clipboard API ile video URL'i kopyala
+    if (navigator.clipboard) {
+        navigator.clipboard.readText().then(text => {
+            if (text && text.includes('tiktok.com')) {
+                document.getElementById('tiktokUrl').value = text;
+                document.querySelector('.link-card').style.display = 'none';
+                document.querySelector('.content-tabs').classList.add('active');
+                document.querySelector('.content-tabs').querySelector('#video-tab').classList.add('active');
+            }
+        }).catch(() => {
+            // Fallback: prompt göster
+            const url = prompt('TikTok video URL\'sini yapıştırın:');
+            if (url && url.includes('tiktok.com')) {
+                document.getElementById('tiktokUrl').value = url;
+                document.querySelector('.link-card').style.display = 'none';
+                document.querySelector('.content-tabs').classList.add('active');
+                document.querySelector('.content-tabs').querySelector('#video-tab').classList.add('active');
+            }
+        });
+    }
+});
+
+// Menu Button
+document.getElementById('menuButton')?.addEventListener('click', () => {
+    // Menu functionality - şimdilik boş, gerekirse eklenebilir
+    console.log('Menu clicked');
+});
+
+// Help Button
+document.getElementById('helpButton')?.addEventListener('click', () => {
+    alert('TikTok video URL\'sini yapıştırın ve indirin. Video, MP3, Hikaye ve Fotoğraf indirme özellikleri mevcuttur.');
 });
 
 // MP3 İndirme

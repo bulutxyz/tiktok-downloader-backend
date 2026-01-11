@@ -2,54 +2,97 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok İndirici - Video, MP3, Hikaye, Fotoğraf</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <title>TikTok İndirici</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="liquid-blob blob-1"></div>
-    <div class="liquid-blob blob-2"></div>
-    <div class="liquid-blob blob-3"></div>
-    <div class="liquid-blob blob-4"></div>
-    
-    <div class="container">
-        <h1>TikTok İndirici</h1>
-        <p class="subtitle">Video, MP3, Hikaye ve Fotoğraf indirin</p>
-        
-        <!-- Tab Menü -->
-        <div class="tabs">
-            <button class="tab-button active" data-tab="video">Video</button>
-            <button class="tab-button" data-tab="mp3">MP3</button>
-            <button class="tab-button" data-tab="story">Hikaye</button>
-            <button class="tab-button" data-tab="photo">Fotoğraf</button>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">05:15</div>
+        <div class="status-right">
+            <span class="signal-icon">📶</span>
+            <span class="wifi-icon">📶</span>
+            <span class="battery-icon">🔋</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <button class="menu-button" id="menuButton">☰</button>
+        <h1 class="app-title">TikTok İndirici</h1>
+        <button class="help-button" id="helpButton">?</button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-content">
+        <div class="link-card">
+            <div class="link-icon-container">
+                <div class="link-icon">🔗</div>
+            </div>
+            <h2 class="card-title">Video bağlantısı ile uygulamaya geri dön</h2>
+            
+            <button class="tiktok-button" id="copyLinkButton">
+                <span class="tiktok-logo">♪</span>
+                <span>Aç ve bağlantıyı kopyala</span>
+            </button>
+            
+            <p class="waiting-text" id="waitingText">Video bağlantısı bekleniyor...</p>
         </div>
 
-        <!-- Video Tab -->
-        <div class="tab-content active" id="video-tab">
-            <input type="text" id="tiktokUrl" placeholder="TikTok Video URL'sini buraya yapıştırın (örn: https://www.tiktok.com/@user/video/1234567890)">
-            <button id="downloadButton">Videoyu İndir</button>
-        </div>
+        <!-- Content Tabs (Hidden initially) -->
+        <div class="content-tabs">
+            <div class="tab-content active" id="video-tab">
+                <input type="text" id="tiktokUrl" class="url-input" placeholder="TikTok Video URL'sini buraya yapıştırın">
+                <button id="downloadButton" class="primary-button">Videoyu İndir</button>
+            </div>
 
-        <!-- MP3 Tab -->
-        <div class="tab-content" id="mp3-tab">
-            <input type="text" id="mp3Url" placeholder="TikTok Video URL'sini buraya yapıştırın">
-            <button id="downloadMp3Button">MP3 İndir</button>
-        </div>
+            <div class="tab-content" id="mp3-tab">
+                <input type="text" id="mp3Url" class="url-input" placeholder="TikTok Video URL'sini buraya yapıştırın">
+                <button id="downloadMp3Button" class="primary-button">MP3 İndir</button>
+            </div>
 
-        <!-- Story Tab -->
-        <div class="tab-content" id="story-tab">
-            <input type="text" id="storyUsername" placeholder="Kullanıcı adını girin (örn: @username veya username)">
-            <button id="downloadStoryButton">Hikayeleri Göster</button>
-        </div>
+            <div class="tab-content" id="story-tab">
+                <input type="text" id="storyUsername" class="url-input" placeholder="Kullanıcı adını girin">
+                <button id="downloadStoryButton" class="primary-button">Hikayeleri Göster</button>
+            </div>
 
-        <!-- Photo Tab -->
-        <div class="tab-content" id="photo-tab">
-            <input type="text" id="photoUrl" placeholder="TikTok Fotoğraf URL'sini buraya yapıştırın">
-            <button id="downloadPhotoButton">Fotoğrafları İndir</button>
+            <div class="tab-content" id="photo-tab">
+                <input type="text" id="photoUrl" class="url-input" placeholder="TikTok Fotoğraf URL'sini buraya yapıştırın">
+                <button id="downloadPhotoButton" class="primary-button">Fotoğrafları İndir</button>
+            </div>
         </div>
 
         <div id="result"></div>
-    </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-nav="link">
+            <span class="nav-icon">🔗</span>
+            <span class="nav-label">Bağlantı</span>
+        </button>
+        <button class="nav-item" data-nav="trends">
+            <span class="nav-icon">🔥</span>
+            <span class="nav-label">Trendler</span>
+        </button>
+        <button class="nav-item" data-nav="analytics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Analitik</span>
+        </button>
+        <button class="nav-item" data-nav="hashtags">
+            <span class="nav-icon">#</span>
+            <span class="nav-label">Hashtagler</span>
+        </button>
+    </nav>
+
+    <!-- Add Video Link Button -->
+    <button class="floating-add-button" id="addLinkButton">
+        <span class="add-icon">🔗</span>
+        <span>Video bağlantısı ekle</span>
+    </button>
+
     <script src="script.js"></script>
 </body>
 </html>
