@@ -401,33 +401,74 @@ body {
     -webkit-backdrop-filter: none;
     border-top: none;
     display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    padding: 8px 0 calc(20px + env(safe-area-inset-bottom));
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px calc(20px + env(safe-area-inset-bottom));
     z-index: 100;
     box-shadow: none;
+}
+
+.bottom-nav::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    transform: translateY(-50%);
+    height: 64px;
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: -1;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .nav-item {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.6);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 5px;
-    padding: 4px 12px;
+    padding: 10px 16px;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex: 1;
     position: relative;
-    border-radius: 0;
+    border-radius: 20px;
     min-width: 0;
+    z-index: 1;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    z-index: -1;
 }
 
 .nav-item.active {
     color: #ffffff;
+}
+
+.nav-item.active::before {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
 }
 
 .nav-icon-wrapper {
@@ -437,6 +478,7 @@ body {
     justify-content: center;
     width: 26px;
     height: 26px;
+    z-index: 1;
 }
 
 .nav-icon {
@@ -447,6 +489,7 @@ body {
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-item.active .nav-icon {
@@ -459,6 +502,8 @@ body {
     letter-spacing: 0;
     opacity: 1;
     transform: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
 }
 
 .nav-item.active .nav-label {
@@ -466,7 +511,7 @@ body {
 }
 
 .nav-item:active {
-    opacity: 0.6;
+    transform: scale(0.95);
 }
 
 /* Floating Add Button */
