@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Filigransız Video İndirici</title>
+    <title>TikTok İndirici - Video, MP3, Hikaye, Fotoğraf</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,10 +13,41 @@
     <div class="liquid-blob blob-4"></div>
     
     <div class="container">
-        <h1>TikTok Filigransız Video İndirici</h1>
-        <p class="subtitle">TikTok videolarını filigran olmadan indirin</p>
-        <input type="text" id="tiktokUrl" placeholder="TikTok Video URL'sini buraya yapıştırın (örn: https://www.tiktok.com/@user/video/1234567890)">
-        <button id="downloadButton">Videoyu İndir</button>
+        <h1>TikTok İndirici</h1>
+        <p class="subtitle">Video, MP3, Hikaye ve Fotoğraf indirin</p>
+        
+        <!-- Tab Menü -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="video">Video</button>
+            <button class="tab-button" data-tab="mp3">MP3</button>
+            <button class="tab-button" data-tab="story">Hikaye</button>
+            <button class="tab-button" data-tab="photo">Fotoğraf</button>
+        </div>
+
+        <!-- Video Tab -->
+        <div class="tab-content active" id="video-tab">
+            <input type="text" id="tiktokUrl" placeholder="TikTok Video URL'sini buraya yapıştırın (örn: https://www.tiktok.com/@user/video/1234567890)">
+            <button id="downloadButton">Videoyu İndir</button>
+        </div>
+
+        <!-- MP3 Tab -->
+        <div class="tab-content" id="mp3-tab">
+            <input type="text" id="mp3Url" placeholder="TikTok Video URL'sini buraya yapıştırın">
+            <button id="downloadMp3Button">MP3 İndir</button>
+        </div>
+
+        <!-- Story Tab -->
+        <div class="tab-content" id="story-tab">
+            <input type="text" id="storyUsername" placeholder="Kullanıcı adını girin (örn: @username veya username)">
+            <button id="downloadStoryButton">Hikayeleri Göster</button>
+        </div>
+
+        <!-- Photo Tab -->
+        <div class="tab-content" id="photo-tab">
+            <input type="text" id="photoUrl" placeholder="TikTok Fotoğraf URL'sini buraya yapıştırın">
+            <button id="downloadPhotoButton">Fotoğrafları İndir</button>
+        </div>
+
         <div id="result"></div>
     </div>
     <script src="script.js"></script>

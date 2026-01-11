@@ -1,10 +1,15 @@
+// Backend API URL
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3000' 
+    : 'https://tiktok-downloader-backend-yk1f.onrender.com';
+
 // Backend bağlantı kontrolü
 async function checkBackendConnection() {
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 saniye timeout
         
-        const response = await fetch('https://tiktok-downloader-backend-yk1f.onrender.com/health', {
+        const response = await fetch(`${API_BASE_URL}/health`, {
             method: 'GET',
             signal: controller.signal
         });
@@ -78,7 +83,7 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 saniye timeout
         
-        const response = await fetch('https://tiktok-downloader-backend-yk1f.onrender.com/download', {
+        const response = await fetch(`${API_BASE_URL}/download`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -144,7 +149,7 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
                             selectedQuality = option.dataset.quality;
                             const newVideoUrl = option.dataset.url;
                             const newFilename = option.dataset.filename;
-                            selectedProxyDownloadUrl = `https://tiktok-downloader-backend-yk1f.onrender.com/proxy-video?videoUrl=${encodeURIComponent(newVideoUrl)}&filename=${encodeURIComponent(newFilename)}`;
+                            selectedProxyDownloadUrl = `${API_BASE_URL}/proxy-video?videoUrl=${encodeURIComponent(newVideoUrl)}&filename=${encodeURIComponent(newFilename)}`;
                             
                             // İndirme ve önizleme linklerini güncelle
                             const downloadLink = document.getElementById('downloadLink');
@@ -181,9 +186,234 @@ document.getElementById('downloadButton').addEventListener('click', async () => 
     }
 });
 
+// Tab switching
+document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const tabName = button.dataset.tab;
+        
+        // Tüm tab butonlarından active class'ını kaldır
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // Tıklanan tab'ı aktif yap
+        button.classList.add('active');
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+        
+        // Result div'i temizle
+        document.getElementById('result').innerHTML = '';
+    });
+});
+
+// MP3 İndirme
+document.getElementById('downloadMp3Button').addEventListener('click', async () => {
+    const tiktokUrl = document.getElementById('mp3Url').value;
+    const resultDiv = document.getElementById('result');
+    const downloadButton = document.getElementById('downloadMp3Button');
+
+    if (!tiktokUrl) {
+        resultDiv.innerHTML = '<p class="error">Lütfen bir TikTok URL\'si girin.</p>';
+        return;
+    }
+
+    if (!tiktokUrl.includes('tiktok.com')) {
+        resultDiv.innerHTML = '<p class="error">Geçerli bir TikTok URL\'si girin.</p>';
+        return;
+    }
+
+    downloadButton.disabled = true;
+    downloadButton.textContent = 'İşleniyor...';
+    resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Video URL\'si alınıyor...</p></div>';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/download-mp3`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: tiktokUrl })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.videoUrl) {
+            resultDiv.innerHTML = `
+                <div class="success">
+                    <p class="success-message">Video URL alındı!</p>
+                    <p class="video-title">${data.title || 'TikTok Audio'}</p>
+                    <p style="color: #b8b8d4; font-size: 14px; margin: 15px 0;">
+                        Not: MP3 dönüşümü için video URL'si alındı. 
+                        Video URL'sini kullanarak MP3'e dönüştürebilirsiniz.
+                    </p>
+                    <div class="download-buttons">
+                        <a href="${data.videoUrl}" download class="download-btn">
+                            Video URL'sini Aç
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = `<p class="error">Hata: ${data.error || 'Bilinmeyen bir hata oluştu.'}</p>`;
+        }
+    } catch (error) {
+        console.error('MP3 download error:', error);
+        resultDiv.innerHTML = '<p class="error">MP3 indirme hatası oluştu.</p>';
+    } finally {
+        downloadButton.disabled = false;
+        downloadButton.textContent = 'MP3 İndir';
+    }
+});
+
+// Hikaye İndirme
+document.getElementById('downloadStoryButton').addEventListener('click', async () => {
+    const username = document.getElementById('storyUsername').value;
+    const resultDiv = document.getElementById('result');
+    const downloadButton = document.getElementById('downloadStoryButton');
+
+    if (!username) {
+        resultDiv.innerHTML = '<p class="error">Lütfen bir kullanıcı adı girin.</p>';
+        return;
+    }
+
+    downloadButton.disabled = true;
+    downloadButton.textContent = 'Yükleniyor...';
+    resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Hikayeler yükleniyor...</p></div>';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/download-story`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.stories) {
+            if (data.stories.length > 0) {
+                let storiesHtml = '<div class="story-grid">';
+                data.stories.forEach((story, index) => {
+                    let storyUrl = story.url || story.video_url || story.cover;
+                    if (storyUrl && storyUrl.startsWith('//')) storyUrl = 'https:' + storyUrl;
+                    else if (storyUrl && storyUrl.startsWith('/')) storyUrl = 'https://tikwm.com' + storyUrl;
+                    
+                    storiesHtml += `
+                        <div class="story-item">
+                            ${storyUrl ? `<img src="${storyUrl}" alt="Story ${index + 1}">` : ''}
+                            <a href="${storyUrl}" download>İndir</a>
+                        </div>
+                    `;
+                });
+                storiesHtml += '</div>';
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <p class="success-message">${data.stories.length} hikaye bulundu!</p>
+                        ${storiesHtml}
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = '<p class="error">Kullanıcının aktif hikayesi bulunamadı.</p>';
+            }
+        } else {
+            resultDiv.innerHTML = `<p class="error">Hata: ${data.error || 'Hikaye bulunamadı.'}</p>`;
+        }
+    } catch (error) {
+        console.error('Story download error:', error);
+        resultDiv.innerHTML = '<p class="error">Hikaye indirme hatası oluştu.</p>';
+    } finally {
+        downloadButton.disabled = false;
+        downloadButton.textContent = 'Hikayeleri Göster';
+    }
+});
+
+// Fotoğraf İndirme
+document.getElementById('downloadPhotoButton').addEventListener('click', async () => {
+    const photoUrl = document.getElementById('photoUrl').value;
+    const resultDiv = document.getElementById('result');
+    const downloadButton = document.getElementById('downloadPhotoButton');
+
+    if (!photoUrl) {
+        resultDiv.innerHTML = '<p class="error">Lütfen bir TikTok URL\'si girin.</p>';
+        return;
+    }
+
+    if (!photoUrl.includes('tiktok.com')) {
+        resultDiv.innerHTML = '<p class="error">Geçerli bir TikTok URL\'si girin.</p>';
+        return;
+    }
+
+    downloadButton.disabled = true;
+    downloadButton.textContent = 'İndiriliyor...';
+    resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Fotoğraflar yükleniyor...</p></div>';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/download-photo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: photoUrl })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.images && data.images.length > 0) {
+            let photosHtml = '<div class="photo-grid">';
+            data.images.forEach((imageUrl, index) => {
+                let imgUrl = imageUrl;
+                if (imgUrl.startsWith('//')) imgUrl = 'https:' + imgUrl;
+                else if (imgUrl.startsWith('/')) imgUrl = 'https://tikwm.com' + imgUrl;
+                
+                photosHtml += `
+                    <div class="photo-item">
+                        <img src="${imgUrl}" alt="Photo ${index + 1}">
+                        <a href="${imgUrl}" download="${data.title || 'photo'}_${index + 1}.jpg">İndir</a>
+                    </div>
+                `;
+            });
+            photosHtml += '</div>';
+            
+            resultDiv.innerHTML = `
+                <div class="success">
+                    <p class="success-message">${data.images.length} fotoğraf bulundu!</p>
+                    ${data.title ? `<p class="video-title">${data.title}</p>` : ''}
+                    ${photosHtml}
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = `<p class="error">Hata: ${data.error || 'Fotoğraf bulunamadı.'}</p>`;
+        }
+    } catch (error) {
+        console.error('Photo download error:', error);
+        resultDiv.innerHTML = '<p class="error">Fotoğraf indirme hatası oluştu.</p>';
+    } finally {
+        downloadButton.disabled = false;
+        downloadButton.textContent = 'Fotoğrafları İndir';
+    }
+});
+
 // Allow Enter key to trigger download
 document.getElementById('tiktokUrl').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         document.getElementById('downloadButton').click();
+    }
+});
+
+document.getElementById('mp3Url').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        document.getElementById('downloadMp3Button').click();
+    }
+});
+
+document.getElementById('storyUsername').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        document.getElementById('downloadStoryButton').click();
+    }
+});
+
+document.getElementById('photoUrl').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        document.getElementById('downloadPhotoButton').click();
     }
 });

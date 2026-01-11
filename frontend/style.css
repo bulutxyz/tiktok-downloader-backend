@@ -573,3 +573,88 @@ button:disabled {
     font-style: italic;
     opacity: 0.7;
 }
+
+/* Tab Styles */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(138, 43, 226, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+.tab-button {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #b8b8d4;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    filter: none !important;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.tab-button:hover {
+    color: #fff;
+    background: rgba(138, 43, 226, 0.1);
+}
+
+.tab-button.active {
+    color: #8a2be2;
+    border-bottom-color: #8a2be2;
+}
+
+.tab-content {
+    display: none;
+    position: relative;
+    z-index: 2;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Story ve Photo Grid Styles */
+.story-grid, .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.story-item, .photo-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(10, 10, 10, 0.5);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+}
+
+.story-item img, .photo-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.story-item a, .photo-item a {
+    display: block;
+    padding: 10px;
+    background: rgba(138, 43, 226, 0.2);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.story-item a:hover, .photo-item a:hover {
+    background: rgba(138, 43, 226, 0.4);
+}
