@@ -233,20 +233,26 @@ document.getElementById('downloadMp3Button').addEventListener('click', async () 
             body: JSON.stringify({ url: tiktokUrl })
         });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'MP3 dönüştürme hatası');
+        }
+
         const data = await response.json();
 
-        if (response.ok && data.videoUrl) {
+        if (data.videoUrl) {
+            // Video URL'ini doğrudan indirme linki olarak göster
+            const filename = (data.title || 'tiktok-video').replace(/[^a-z0-9]/gi, '_').toLowerCase();
             resultDiv.innerHTML = `
                 <div class="success">
                     <p class="success-message">Video URL alındı!</p>
                     <p class="video-title">${data.title || 'TikTok Audio'}</p>
                     <p style="color: #b8b8d4; font-size: 14px; margin: 15px 0;">
-                        Not: MP3 dönüşümü için video URL'si alındı. 
-                        Video URL'sini kullanarak MP3'e dönüştürebilirsiniz.
+                        Not: Video URL'si alındı. Video'yu indirip MP3'e dönüştürmek için harici araçlar kullanabilirsiniz.
                     </p>
                     <div class="download-buttons">
-                        <a href="${data.videoUrl}" download class="download-btn">
-                            Video URL'sini Aç
+                        <a href="${data.videoUrl}" download="${filename}.mp4" class="download-btn">
+                            Videoyu İndir
                         </a>
                     </div>
                 </div>

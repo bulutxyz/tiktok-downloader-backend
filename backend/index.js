@@ -189,17 +189,33 @@ app.post('/download-story', async (req, res) => {
     try {
         // Username'den @ işaretini kaldır
         const cleanUsername = username.replace('@', '').trim();
-        const apiUrl = `https://www.tikwm.com/api/user/story?unique_id=${encodeURIComponent(cleanUsername)}`;
-        const response = await fetch(apiUrl);
+        
+        // TikTok API'yi kullanarak hikayeleri al (alternatif yöntem - video endpoint'ini kullan)
+        const tikwmApiUrl = 'https://www.tikwm.com/api/';
+        const response = await fetch(tikwmApiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `url=${encodeURIComponent(`https://www.tiktok.com/@${cleanUsername}`)}&web=1`,
+        });
+        
         const data = await response.json();
-
+        
+        // Eğer user profile API'si çalışmazsa, hata mesajı döndür
         if (data && data.code === 0 && data.data) {
+            // User videos'larından hikaye benzeri içerikleri filtrele
+            const videos = data.data.videos || [];
             res.json({
-                stories: data.data,
-                username: cleanUsername
+                stories: videos.slice(0, 10), // Son 10 videoyu göster
+                username: cleanUsername,
+                message: 'Hikaye özelliği şu anda mevcut değil. Son videolar gösteriliyor.'
             });
         } else {
-            res.status(500).json({ error: 'Hikaye bulunamadı veya kullanıcının aktif hikayesi yok.' });
+            res.status(500).json({ 
+                error: 'Kullanıcı bulunamadı veya hikaye özelliği desteklenmiyor.', 
+                details: data?.msg || 'TikTok API hikaye desteği kısıtlıdır.'
+            });
         }
     } catch (error) {
         console.error('Story download error:', error);
